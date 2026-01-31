@@ -71,7 +71,7 @@ body.dark .navbar {
 
 .nav-logo {
   font-weight: 700;
-  font-size: 1.25rem; /* leggermente più grande */
+  font-size: 1.5rem; /* un po' più grande */
   letter-spacing: -0.4px;
 }
 
@@ -119,6 +119,11 @@ body.dark .navbar {
   border: none;
   font-size: 1.6rem;
   cursor: pointer;
+  transition: transform .3s ease;
+}
+
+.nav-toggle.open {
+  transform: rotate(90deg);
 }
 
 @media (max-width: 768px) {
@@ -135,10 +140,15 @@ body.dark .navbar {
     gap: 18px;
     padding: 24px;
     display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity .3s ease, transform .3s ease;
   }
 
   .nav-links.open {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -249,7 +259,6 @@ p {
   transform: scale(1.05);
 }
 
-/* ===== price value perception (minimal) ===== */
 .old-price {
   font-size: 1.1rem;
   color: var(--muted);
@@ -258,7 +267,8 @@ p {
 }
 
 .price {
-  font-size: 3.1rem;
+  font-size: 3.3rem; /* più visibile */
+  font-weight: 700;
   margin: 6px 0 10px;
 }
 
@@ -316,6 +326,32 @@ footer {
 .reveal.active {
   opacity: 1;
   transform: none;
+}
+
+/* ================= MOBILE FRIENDLY ================= */
+@media (max-width: 768px) {
+  .container { padding: 80px 20px; }
+
+  .hero { grid-template-columns: 1fr; gap: 40px; }
+
+  .hero-box { padding: 30px; }
+
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 1.8rem; margin-bottom: 50px; }
+  p { font-size: 1rem; max-width: 100%; }
+
+  .grid-3 { grid-template-columns: 1fr; gap: 25px; }
+  .pricing { grid-template-columns: 1fr; gap: 25px; }
+
+  .plan { padding: 36px 24px; }
+  .plan.featured { transform: none; }
+
+  .price { font-size: 2.5rem; }
+
+  .btn { width: 100%; text-align: center; padding: 14px 0; font-size: 1.05rem; }
+
+  .faq-item { padding: 28px 20px; }
+  .cta { padding: 60px 20px; }
 }
 </style>
 </head>
@@ -486,7 +522,10 @@ window.addEventListener('scroll',()=>{
 /* mobile nav */
 const navToggle=document.getElementById('navToggle');
 const navLinks=document.getElementById('navLinks');
-navToggle.onclick=()=>navLinks.classList.toggle('open');
+navToggle.onclick=()=>{
+  navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open');
+};
 
 /* slow smooth scroll */
 document.querySelectorAll('.nav-links a').forEach(link=>{
@@ -510,6 +549,7 @@ document.querySelectorAll('.nav-links a').forEach(link=>{
 
     requestAnimationFrame(animate);
     navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
   });
 });
 </script>
