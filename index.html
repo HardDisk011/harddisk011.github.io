@@ -1,570 +1,953 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Clean Website Development – Fixed Price</title>
-<link rel="icon" href="favicon.png" type="image/png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sitebuyld.com - The Right Website. Built at the Right Level.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-:root {
-  --bg: #f3f4f6;
-  --surface: #ffffff;
-  --text: #0f172a;
-  --muted: #475569;
-  --primary: #1d4ed8;
-  --border: #e5e7eb;
-  --radius: 18px;
-  --shadow-soft: 0 10px 30px rgba(0,0,0,.06);
-  --shadow-hover: 0 30px 60px rgba(0,0,0,.12);
-}
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #00d4aa;
+            --accent-hover: #00b894;
+            --border: #2a2a2a;
+            --shadow: rgba(0, 212, 170, 0.1);
+            --card-bg: #161616;
+        }
 
-body.dark {
-  --bg: #020617;
-  --surface: #0f172a;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --primary: #6366f1;
-  --border: #1f2937;
-}
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #f0f1f3;
+            --text-primary: #0a0a0a;
+            --text-secondary: #5a5a5a;
+            --accent: #00b894;
+            --accent-hover: #00d4aa;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 184, 148, 0.15);
+            --card-bg: #ffffff;
+        }
 
-* {
-  box-sizing: border-box;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.85;
-  transition: background .3s ease, color .3s ease;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-/* ================= NAVBAR ================= */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  z-index: 1000;
-  transition: box-shadow .3s ease;
-}
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+        }
 
-body.dark .navbar {
-  background: rgba(15,23,42,.85);
-}
+        .navbar.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.8);
+        }
 
-.navbar.scrolled {
-  box-shadow: var(--shadow-soft);
-}
+        [data-theme="light"] .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
 
-.nav-inner {
-  max-width: 1180px;
-  margin: auto;
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.nav-logo {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: -0.4px;
-}
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
 
-.nav-links {
-  display: flex;
-  gap: 28px;
-}
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+            list-style: none;
+        }
 
-.nav-links a {
-  text-decoration: none;
-  color: var(--muted);
-  font-weight: 500;
-  position: relative;
-}
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            letter-spacing: 0.3px;
+        }
 
-.nav-links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width .3s ease;
-}
+        .nav-links a:hover {
+            color: var(--accent);
+        }
 
-.nav-links a:hover::after {
-  width: 100%;
-}
+        .nav-cta {
+            background: var(--accent);
+            color: #000;
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
 
-.nav-links a:hover {
-  color: var(--text);
-}
+        .nav-cta:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
 
-.nav-cta {
-  background: var(--primary);
-  color: white !important;
-  padding: 10px 20px;
-  border-radius: 999px;
-}
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
 
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  cursor: pointer;
-  transition: transform .3s ease;
-}
+        .theme-toggle:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
 
-.nav-toggle.open {
-  transform: rotate(90deg);
-}
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
 
-@media (max-width: 768px) {
-  .nav-toggle { display: block; }
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
 
-  .nav-links {
-    position: absolute;
-    top: 64px;
-    left: 0;
-    width: 100%;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    gap: 18px;
-    padding: 24px;
-    display: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity .3s ease, transform .3s ease;
-  }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
 
-  .nav-links.open {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
 
-/* ================= ORIGINAL STYLES ================= */
-.container {
-  max-width: 1180px;
-  margin: auto;
-  padding: 110px 24px;
-}
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
 
-section + section {
-  border-top: 1px solid var(--border);
-}
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
 
-h1 {
-  font-size: 3.6rem;
-  line-height: 1.05;
-  letter-spacing: -1.4px;
-  margin-bottom: 28px;
-}
+        section {
+            padding: 120px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
 
-h2 {
-  font-size: 2.3rem;
-  letter-spacing: -0.6px;
-  margin-bottom: 70px;
-  text-align: center;
-}
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-p {
-  color: var(--muted);
-  max-width: 60ch;
-}
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
 
-.btn {
-  display: inline-block;
-  background: var(--primary);
-  color: white;
-  padding: 16px 40px;
-  border-radius: 999px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
-}
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 4rem;
+            align-items: center;
+        }
 
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
-  opacity: .95;
-}
+        .hero-main h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
 
-.theme-toggle {
-  position: fixed;
-  top: 90px;
-  right: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 10px 18px;
-  border-radius: 999px;
-  cursor: pointer;
-  z-index: 1001;
-}
+        .hero-main p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+            max-width: 600px;
+        }
 
-.hero {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 90px;
-  align-items: center;
-}
+        .hero-bullets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
 
-.hero-box,
-.card,
-.plan,
-.faq-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-}
+        .hero-bullets span {
+            background: var(--bg-tertiary);
+            padding: 0.6rem 1.3rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.3px;
+        }
 
-.hero-box { padding: 52px; }
-.card { padding: 42px; }
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 1.1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
 
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 40px;
-}
+        .cta-button:hover {
+            background: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--shadow);
+        }
 
-.pricing {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
-}
+        .hero-side-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
 
-.plan {
-  padding: 54px;
-  text-align: center;
-  transition: transform .3s ease, box-shadow .3s ease;
-}
+        .hero-side-box h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
 
-.plan:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-hover);
-}
+        .hero-side-box ul {
+            list-style: none;
+        }
 
-.plan.featured {
-  border: 2px solid var(--primary);
-  transform: scale(1.05);
-}
+        .hero-side-box li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
 
-.old-price {
-  font-size: 1.1rem;
-  color: var(--muted);
-  text-decoration: line-through;
-  margin-bottom: 6px;
-}
+        .hero-side-box li:last-child {
+            border-bottom: none;
+        }
 
-.price {
-  font-size: 3.3rem;
-  font-weight: 700;
-  margin: 6px 0 10px;
-}
+        .hero-side-box li::before {
+            content: '•';
+            color: var(--accent);
+            font-weight: bold;
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
 
-.price-badge {
-  display: inline-block;
-  margin-bottom: 20px;
-  font-size: .75rem;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(29,78,216,.12);
-  color: var(--primary);
-}
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 4rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
 
-.plan ul {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0;
-}
+        .how-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
 
-.plan li {
-  margin-bottom: 12px;
-  color: var(--muted);
-}
+        .how-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-.faq {
-  max-width: 900px;
-  margin: auto;
-}
+        .how-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
 
-.faq-item {
-  padding: 40px;
-  margin-bottom: 22px;
-}
+        .how-card:hover::before {
+            transform: scaleX(1);
+        }
 
-.cta {
-  text-align: center;
-  padding: 90px 40px;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--surface), transparent);
-}
+        .how-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow);
+            border-color: var(--accent);
+        }
 
-footer {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--muted);
-}
+        .how-card-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: .7s cubic-bezier(.2,.8,.2,1);
-}
+        .how-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
 
-.reveal.active {
-  opacity: 1;
-  transform: none;
-}
+        .email-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
 
-/* ================= MOBILE FRIENDLY ================= */
-@media (max-width: 768px) {
-  .container { padding: 80px 20px; }
-  .hero { grid-template-columns: 1fr; gap: 40px; }
-  .hero-box { padding: 30px; }
-  h1 { font-size: 2.4rem; }
-  h2 { font-size: 1.8rem; margin-bottom: 50px; }
-  p { font-size: 1rem; max-width: 100%; }
-  .grid-3 { grid-template-columns: 1fr; gap: 25px; }
-  .pricing { grid-template-columns: 1fr; gap: 25px; }
-  .plan { padding: 36px 24px; }
-  .plan.featured { transform: none; }
-  .price { font-size: 2.5rem; }
-  .btn { width: 100%; text-align: center; padding: 14px 0; font-size: 1.05rem; }
-  .faq-item { padding: 28px 20px; }
-  .cta { padding: 60px 20px; }
-}
-</style>
+        .email-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .email-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .email-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .email-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 12px 40px var(--shadow);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 50px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-10px) scale(1.07);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent);
+            color: #000;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .pricing-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-old {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-current {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .pricing-highlight {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .final-cta {
+            text-align: center;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 5rem 2rem;
+        }
+
+        .final-cta h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .hosting-note {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+            font-style: italic;
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 968px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--bg-primary);
+                flex-direction: column;
+                gap: 0;
+                padding: 2rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid var(--border);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .nav-links li {
+                width: 100%;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            section {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-bullets {
+                flex-direction: column;
+            }
+
+            .how-cards,
+            .email-cards,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">sitebuyld.com</div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="nav-cta">Start</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
 
-<nav class="navbar">
-  <div class="nav-inner">
-    <div class="nav-logo">sitebuyld.com</div>
-    <button class="nav-toggle" id="navToggle">☰</button>
-    <div class="nav-links" id="navLinks">
-      <a href="#hero">Home</a>
-      <a href="#how">How it works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
-      <a href="#start" class="nav-cta">Start</a>
-    </div>
-  </div>
-</nav>
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-main">
+                    <h1>The Right Website.<br>Built at the Right Level.</h1>
+                    <p>Clean, professional websites designed for clarity, credibility, and performance — without unnecessary complexity.</p>
+                    <div class="hero-bullets">
+                        <span>3 clear packages</span>
+                        <span>Cheap</span>
+                        <span>HTML / CSS / JavaScript only</span>
+                        <span>No subscriptions</span>
+                    </div>
+                    <a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="cta-button">Start my website</a>
+                </div>
+                <div class="hero-side-box">
+                    <h3>What you get</h3>
+                    <ul>
+                        <li>Clean, modern interface</li>
+                        <li>Structured, user-focused UX</li>
+                        <li>Fast development & delivery</li>
+                        <li>Clear, professional communication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-const FORM_LINK = "mailto:websites.it99@gmail.com?subject=Website%20Request";
-</script>
+    <section id="how">
+        <div class="container">
+            <h2 class="section-title">How it works</h2>
+            <div class="how-cards">
+                <div class="how-card">
+                    <div class="how-card-number">1</div>
+                    <p>Choose a package and write us a mail</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-card-number">2</div>
+                    <p>Order confirmation and secure payment via email (as soon as we'll see your email we'll send the confirmation mail back)</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-card-number">3</div>
+                    <p>Fast development and delivery (3–5 business days)</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<button class="theme-toggle" id="toggle">🌙</button>
+    <section id="email-section">
+        <div class="container">
+            <h2 class="section-title">What to include in your email</h2>
+            <div class="email-cards">
+                <div class="email-card">
+                    <h3>Selected Bundle</h3>
+                    <p>Let me know which package you chose (Base, Medium, or Pro).</p>
+                </div>
+                <div class="email-card">
+                    <h3>Detailed Website Description</h3>
+                    <p>Describe goals, style, sections, features, and references.</p>
+                </div>
+                <div class="email-card">
+                    <h3>Extra Notes</h3>
+                    <p>Deadlines, inspiration, or special requests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="hero" class="container hero reveal">
-  <div>
-    <h1>The Right Website.<br>Built at the Right Level.</h1>
-    <p>
-      Clean, professional websites designed for clarity, credibility,
-      and performance — without unnecessary complexity.
-    </p>
-    <p style="margin-top:18px">
-      - 3 clear packages<br>
-      - Cheap<br>
-      - HTML / CSS / JavaScript only<br>
-      - No subscriptions
-    </p>
-    <a class="btn" href="#" onclick="location.href=FORM_LINK">Start my website</a>
-    <p style="margin-top:14px; font-size:.9rem">
-      *Hosting is handled by the client.*
-    </p>
-  </div>
+    <section id="pricing">
+        <div class="container">
+            <h2 class="section-title">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-badge">Limited offer</div>
+                    <h3>Base</h3>
+                    <div class="pricing-old">$89</div>
+                    <div class="pricing-current">$59</div>
+                    <p class="pricing-description">A clean and functional website.</p>
+                    <ul class="pricing-features">
+                        <li>Responsive layout</li>
+                        <li>Essential sections</li>
+                        <li>Minimal styling</li>
+                        <li>Email delivery</li>
+                    </ul>
+                    <a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Base</a>
+                </div>
 
-  <div class="hero-box">
-    <h3>What you get</h3>
-    <p>
-      • Clean, modern interface<br>
-      • Structured, user-focused UX<br>
-      • Fast development & delivery<br>
-      • Clear, professional communication
-    </p>
-  </div>
-</section>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Best value</div>
+                    <h3>Medium</h3>
+                    <div class="pricing-old">$129</div>
+                    <div class="pricing-current">$79</div>
+                    <div class="pricing-highlight">Best value for most projects.</div>
+                    <ul class="pricing-features">
+                        <li>Custom layout</li>
+                        <li>Improved UX flow</li>
+                        <li>Conversion-focused</li>
+                        <li>Priority handling</li>
+                    </ul>
+                    <a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Medium</a>
+                </div>
 
-<section id="how" class="container reveal">
-<h2>How it works</h2>
-<div class="grid-3">
-  <div class="card">Choose a package and write us a mail (linked to every button and at the footer of the website)</div>
-  <div class="card">Order confirmation and secure payment via email (as soon as we'll see your email we'll send the confirmation mail back)</div>
-  <div class="card">Fast development and delivery (3-5 business days)</div>
-</div>
-</section>
+                <div class="pricing-card">
+                    <div class="pricing-badge">Limited offer</div>
+                    <h3>Pro</h3>
+                    <div class="pricing-old">$179</div>
+                    <div class="pricing-current">$109</div>
+                    <p class="pricing-description">Premium polish and flexibility.</p>
+                    <ul class="pricing-features">
+                        <li>High-end customization</li>
+                        <li>Advanced layout</li>
+                        <li>More sections</li>
+                        <li>Top priority</li>
+                    </ul>
+                    <a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Pro</a>
+                </div>
+            </div>
+            <p class="hosting-note">*Hosting is handled by the client.</p>
+        </div>
+    </section>
 
-<!-- ✅ NEW SECTION – COHERENT & ANIMATED -->
-<section class="container reveal">
-<h2>What to include in your email</h2>
-<div class="grid-3">
-  <div class="card">
-    <strong>1. Selected Bundle</strong><br>
-    Let us know which package you chose (Base, Medium, or Pro).
-  </div>
-  <div class="card">
-    <strong>2. Detailed Website Description</strong><br>
-    Describe goals, style, sections, features, and references.
-  </div>
-  <div class="card">
-    <strong>3. Extra Notes</strong><br>
-    Deadlines, inspiration, or special requests.
-  </div>
-</div>
-</section>
+    <section id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">What happens next?</div>
+                    <div class="faq-answer">
+                        <p>You receive an order summary and payment link. Development starts immediately after confirmation.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Delivery time?</div>
+                    <div class="faq-answer">
+                        <p>Most websites are delivered within a few business days.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Do I own the website?</div>
+                    <div class="faq-answer">
+                        <p>Yes. Full ownership, no recurring fees.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="pricing" class="container reveal">
-<h2>Pricing</h2>
-<div class="pricing">
-  <div class="plan">
-    <div class="old-price">$89</div>
-    <div class="price">$59</div>
-    <span class="price-badge">Limited offer</span>
-    <p>A clean and functional website.</p>
-    <ul>
-      <li>Responsive layout</li>
-      <li>Essential sections</li>
-      <li>Minimal styling</li>
-      <li>Email delivery</li>
-    </ul>
-    <a class="btn" href="#" onclick="location.href=FORM_LINK">Select Base</a>
-  </div>
+    <section id="start">
+        <div class="container">
+            <div class="final-cta">
+                <h2>Ready to get started?</h2>
+                <p>Choose a package and submit your request.</p>
+                <a href="mailto:websites.it99@gmail.com?subject=Website%20Request" class="cta-button">Start my website</a>
+            </div>
+        </div>
+    </section>
 
-  <div class="plan featured">
-    <div class="old-price">$129</div>
-    <div class="price">$79</div>
-    <span class="price-badge">Best value</span>
-    <p><strong>Best value for most projects.</strong></p>
-    <ul>
-      <li>Custom layout</li>
-      <li>Improved UX flow</li>
-      <li>Conversion-focused</li>
-      <li>Priority handling</li>
-    </ul>
-    <a class="btn" href="#" onclick="location.href=FORM_LINK">Select Medium</a>
-  </div>
+    <footer>
+        <div class="container">
+            <p>© 2026 – www.sitebuyld.com · Fast delivery · <a href="mailto:websites.it99@gmail.com">websites.it99@gmail.com</a></p>
+        </div>
+    </footer>
 
-  <div class="plan">
-    <div class="old-price">$179</div>
-    <div class="price">$109</div>
-    <span class="price-badge">Limited offer</span>
-    <p>Premium polish and flexibility.</p>
-    <ul>
-      <li>High-end customization</li>
-      <li>Advanced layout</li>
-      <li>More sections</li>
-      <li>Top priority</li>
-    </ul>
-    <a class="btn" href="#" onclick="location.href=FORM_LINK">Select Pro</a>
-  </div>
-</div>
-</section>
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const navbar = document.querySelector('.navbar');
 
-<section id="faq" class="container reveal">
-<h2>Frequently Asked Questions</h2>
-<div class="faq">
-  <div class="faq-item">
-    <h3>What happens next?</h3>
-    <p>You receive an order summary and payment link. Development starts immediately after confirmation.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Delivery time?</h3>
-    <p>Most websites are delivered within a few business days.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Do I own the website?</h3>
-    <p>Yes. Full ownership, no recurring fees.</p>
-  </div>
-</div>
-</section>
+        let currentTheme = 'dark';
+        themeToggle.textContent = '🌙';
 
-<section id="start" class="container reveal">
-<div class="cta">
-  <h2>Ready to get started?</h2>
-  <p>Choose a package and submit your request.</p>
-  <a class="btn" href="#" onclick="location.href=FORM_LINK">Start my website</a>
-</div>
-</section>
+        themeToggle.addEventListener('click', () => {
+            if (currentTheme === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                themeToggle.textContent = '☀️';
+                currentTheme = 'light';
+            } else {
+                html.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙';
+                currentTheme = 'dark';
+            }
+        });
 
-<footer>
-© 2026 – www.sitebuyld.com · Fast delivery · <a href="mailto:websites.it99@gmail.com?subject=Website%20Request">websites.it99@gmail.com</a>
-</footer>
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
 
-<script>
-/* reveal */
-const obs = new IntersectionObserver(e=>{
-  e.forEach(i=>{
-    if(i.isIntersecting){
-      i.target.classList.add('active');
-      obs.unobserve(i.target);
-    }
-  })
-},{threshold:.15});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
 
-/* theme */
-const t=document.getElementById('toggle');
-t.onclick=()=>{
-  document.body.classList.toggle('dark');
-  t.textContent=document.body.classList.contains('dark')?'☀️':'🌙';
-};
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
 
-/* navbar shadow */
-const navbar=document.querySelector('.navbar');
-window.addEventListener('scroll',()=>{
-  navbar.classList.toggle('scrolled', window.scrollY>40);
-});
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
 
-/* mobile nav */
-const navToggle=document.getElementById('navToggle');
-const navLinks=document.getElementById('navLinks');
-navToggle.onclick=()=>{
-  navLinks.classList.toggle('open');
-  navToggle.classList.toggle('open');
-};
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-/* slow smooth scroll */
-document.querySelectorAll('.nav-links a').forEach(link=>{
-  link.addEventListener('click',e=>{
-    e.preventDefault();
-    const target=document.querySelector(link.getAttribute('href'));
-    if(!target) return;
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
 
-    const start=window.scrollY;
-    const end=target.offsetTop-90;
-    const duration=900;
-    let startTime=null;
+        document.querySelector('.hero').classList.add('visible');
 
-    function animate(time){
-      if(!startTime) startTime=time;
-      const p=Math.min((time-startTime)/duration,1);
-      const ease=1-Math.pow(1-p,3);
-      window.scrollTo(0,start+(end-start)*ease);
-      if(p<1) requestAnimationFrame(animate);
-    }
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
 
-    requestAnimationFrame(animate);
-    navLinks.classList.remove('open');
-    navToggle.classList.remove('open');
-  });
-});
-</script>
-
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
