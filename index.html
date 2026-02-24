@@ -1,953 +1,422 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it-IT">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sitebuyld.com - The Right Website. Built at the Right Level.</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #141414;
-            --bg-tertiary: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent: #00d4aa;
-            --accent-hover: #00b894;
-            --border: #2a2a2a;
-            --shadow: rgba(0, 212, 170, 0.1);
-            --card-bg: #161616;
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-tertiary: #f0f1f3;
-            --text-primary: #0a0a0a;
-            --text-secondary: #5a5a5a;
-            --accent: #00b894;
-            --accent-hover: #00d4aa;
-            --border: #e0e0e0;
-            --shadow: rgba(0, 184, 148, 0.15);
-            --card-bg: #ffffff;
-        }
-
-        body {
-            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: var(--bg-primary);
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 10, 0.8);
-        }
-
-        [data-theme="light"] .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.2rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--accent);
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-            letter-spacing: 0.3px;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .nav-cta {
-            background: var(--accent);
-            color: #000;
-            padding: 0.7rem 1.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .nav-cta:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px var(--shadow);
-        }
-
-        .theme-toggle {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .theme-toggle:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: scale(1.05);
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 2px;
-            background: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        section {
-            padding: 120px 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 80px;
-        }
-
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1.3fr 0.7fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-main h1 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -2px;
-        }
-
-        .hero-main p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
-            max-width: 600px;
-        }
-
-        .hero-bullets {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .hero-bullets span {
-            background: var(--bg-tertiary);
-            padding: 0.6rem 1.3rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border: 1px solid var(--border);
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.3px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: var(--accent);
-            color: #000;
-            padding: 1.1rem 2.5rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-        }
-
-        .cta-button:hover {
-            background: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px var(--shadow);
-        }
-
-        .hero-side-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-side-box h3 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-        }
-
-        .hero-side-box ul {
-            list-style: none;
-        }
-
-        .hero-side-box li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .hero-side-box li:last-child {
-            border-bottom: none;
-        }
-
-        .hero-side-box li::before {
-            content: '•';
-            color: var(--accent);
-            font-weight: bold;
-            margin-right: 0.8rem;
-            font-size: 1.2rem;
-        }
-
-        .section-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 4rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-        }
-
-        .how-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .how-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .how-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .how-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .how-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px var(--shadow);
-            border-color: var(--accent);
-        }
-
-        .how-card-number {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent);
-            opacity: 0.3;
-            margin-bottom: 1rem;
-        }
-
-        .how-card p {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-        }
-
-        .email-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .email-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.4s ease;
-        }
-
-        .email-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px var(--shadow);
-            border-color: var(--accent);
-        }
-
-        .email-card h3 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--accent);
-        }
-
-        .email-card p {
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .pricing-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 2.5rem;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .pricing-card.featured {
-            border-color: var(--accent);
-            box-shadow: 0 12px 40px var(--shadow);
-            transform: scale(1.05);
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 50px var(--shadow);
-            border-color: var(--accent);
-        }
-
-        .pricing-card.featured:hover {
-            transform: translateY(-10px) scale(1.07);
-        }
-
-        .pricing-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: var(--accent);
-            color: #000;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .pricing-card h3 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pricing-old {
-            text-decoration: line-through;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .pricing-current {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .pricing-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-style: italic;
-        }
-
-        .pricing-highlight {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--accent);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-features li {
-            padding: 0.7rem 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-
-        .pricing-features li:last-child {
-            border-bottom: none;
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--accent);
-            font-weight: bold;
-            margin-right: 0.8rem;
-        }
-
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            border-color: var(--accent);
-        }
-
-        .faq-question {
-            font-family: 'JetBrains Mono', monospace;
-            padding: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--accent);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.active .faq-question::after {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 1.5rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 200px;
-            padding: 0 1.5rem 1.5rem;
-        }
-
-        .final-cta {
-            text-align: center;
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            padding: 5rem 2rem;
-        }
-
-        .final-cta h2 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(2rem, 4vw, 3rem);
-            margin-bottom: 1rem;
-        }
-
-        .final-cta p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-        }
-
-        .hosting-note {
-            text-align: center;
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-top: 3rem;
-            font-style: italic;
-        }
-
-        footer {
-            background: var(--bg-secondary);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
-
-        footer p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 968px) {
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: var(--bg-primary);
-                flex-direction: column;
-                gap: 0;
-                padding: 2rem;
-                transform: translateY(-100%);
-                opacity: 0;
-                pointer-events: none;
-                transition: all 0.3s ease;
-                border-bottom: 1px solid var(--border);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            }
-
-            .nav-links.active {
-                transform: translateY(0);
-                opacity: 1;
-                pointer-events: all;
-            }
-
-            .nav-links li {
-                width: 100%;
-                padding: 1rem 0;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .nav-links li:last-child {
-                border-bottom: none;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-card.featured {
-                transform: scale(1);
-            }
-
-            section {
-                padding: 80px 0;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .nav-container {
-                padding: 1rem;
-            }
-
-            .container {
-                padding: 0 1rem;
-            }
-
-            .hero-bullets {
-                flex-direction: column;
-            }
-
-            .how-cards,
-            .email-cards,
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PRIMARY SEO -->
+  <title>Siti Web Professionali per Attività Locali – sitebuyld.com</title>
+  <meta name="description" content="Crea il sito web della tua attività locale con sitebuyld.com. Dominio incluso, hosting gestito, SEO professionale e zero abbonamenti nascosti. Siti web locali pronti in 3–10 giorni lavorativi." />
+  <meta name="keywords" content="siti web locali, dominio incluso, hosting gestito, SEO professionale, creare sito web attività locale, sito web per negozio, sito web ristorante, sito web artigiano, siti web Italia, web agency locale, sito web economico professionale" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="sitebuyld.com" />
+  <link rel="canonical" href__="https://sitebuyld.com" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.png" type="image/png" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sitebuyld.com" />
+  <meta property="og:title" content="Siti Web Professionali per Attività Locali – sitebuyld.com" />
+  <meta property="og:description" content="Dominio, hosting e SEO tutto incluso. Nessun abbonamento. Siti web locali professionali in 3–10 giorni." />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:site_name" content="sitebuyld.com" />
+
+  <!-- STRUCTURED DATA: LocalBusiness -->
+  <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "sitebuyld.com",
+    "description": "Creazione siti web professionali per attività locali con dominio, hosting e SEO inclusi.",
+    "url": "https://sitebuyld.com",
+    "email": "discolo262011@gmail.com",
+    "areaServed": "IT",
+    "availableLanguage": "Italian",
+    "priceRange": "€€",
+    "serviceType": "Web Design e Sviluppo Siti Web",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Via Legnano 11",
+        "addressLocality": "Nerviano",
+        "postalCode": "20014",
+        "addressCountry": "IT"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.557186672315915,
+        "longitude": 8.975707818376627
+    },
+    "offers": [
+        {
+        "@type": "Offer",
+        "name": "Pacchetto Starter",
+        "price": "490",
+        "priceCurrency": "EUR",
+        "description": "Sito web 1-3 pagine, dominio + hosting 1 anno, SEO base, 1 revisione"
+        },
+        {
+        "@type": "Offer",
+        "name": "Pacchetto Business",
+        "price": "790",
+        "priceCurrency": "EUR",
+        "description": "Sito web fino a 5 pagine, SEO avanzato, Google Analytics, supporto 30 giorni"
+        },
+        {
+        "@type": "Offer",
+        "name": "Pacchetto Pro",
+        "price": "1190",
+        "priceCurrency": "EUR",
+        "description": "Struttura personalizzata, SEO locale avanzata, ottimizzazione conversioni, supporto 60 giorni"
+        }
+    ]
+    }
+  </script>
+
+  <!-- STRUCTURED DATA: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Come faccio a ordinare un sito web?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Scrivi una email a discolo262011@gmail.com indicando il nome della tua attività e il pacchetto di tuo interesse. Ti risponderemo entro 24 ore lavorative."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quanto tempo ci vuole per avere il sito online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Starter: 3-5 giorni, Business: 5-7 giorni, Pro: 7-10 giorni lavorativi dalla conferma del pagamento."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Il sito sarà di mia proprietà?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sì, il sito, il dominio e tutti i contenuti sono tuoi al 100% dalla consegna. Nessun lock-in."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ci sono costi ricorrenti obbligatori?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Il pagamento è unico e include dominio + hosting per il primo anno. La manutenzione mensile da €29 è opzionale."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href__="style.css" />
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">sitebuyld.com</div>
-            <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#how">How it works</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="nav-cta">Start</a></li>
-            </ul>
-            <button class="theme-toggle" id="themeToggle">🌙</button>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
+
+  <!-- NAV -->
+  <header role="banner">
+    <nav aria-label="Navigazione principale">
+      <a href__="#" class="nav-logo" aria-label="sitebuyld.com homepage">site<span>buyld</span>.com</a>
+      <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" aria-label="Cambia tema chiaro/scuro">🌙</button>
+        <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request" class="nav-cta">Richiedi Preventivo</a>
+      </div>
     </nav>
+  </header>
 
-    <section class="hero" id="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-main">
-                    <h1>The Right Website.<br>Built at the Right Level.</h1>
-                    <p>Clean, professional websites designed for clarity, credibility, and performance — without unnecessary complexity.</p>
-                    <div class="hero-bullets">
-                        <span>3 clear packages</span>
-                        <span>Cheap</span>
-                        <span>HTML / CSS / JavaScript only</span>
-                        <span>No subscriptions</span>
-                    </div>
-                    <a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="cta-button">Start my website</a>
-                </div>
-                <div class="hero-side-box">
-                    <h3>What you get</h3>
-                    <ul>
-                        <li>Clean, modern interface</li>
-                        <li>Structured, user-focused UX</li>
-                        <li>Fast development & delivery</li>
-                        <li>Clear, professional communication</li>
-                    </ul>
-                </div>
-            </div>
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-badge" role="status">
+          <span class="dot" aria-hidden="true"></span>
+          Disponibile ora &middot; Consegna in 3–10 giorni lavorativi
         </div>
+        <h1 id="hero-title">
+          Siti Web Professionali.<br />
+          <span class="gradient-text">Pronti a fare crescere</span><br />
+          il tuo business.
+        </h1>
+        <p class="hero-sub">
+          Credibilità immediata, performance reale, presenza online che converte visitatori in clienti.
+          Tutto ciò di cui ha bisogno la tua attività locale — senza complicazioni tecniche.
+        </p>
+        <ul class="hero-bullets" aria-label="Caratteristiche principali">
+          <li>3 pacchetti chiari e trasparenti</li>
+          <li>Tutto incluso: dominio, hosting, SEO</li>
+          <li>Zero abbonamenti nascosti</li>
+          <li>Consegna rapida garantita</li>
+          <li>SEO locale per farsi trovare su Google</li>
+        </ul>
+        <div class="hero-ctas">
+          <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request" class="btn-primary" aria-label="Contattaci via email per iniziare">
+            ✉ Inizia Ora &rarr;
+          </a>
+          <a href__="#prezzi" class="btn-secondary">Vedi i Prezzi</a>
+        </div>
+      </div>
     </section>
 
-    <section id="how">
-        <div class="container">
-            <h2 class="section-title">How it works</h2>
-            <div class="how-cards">
-                <div class="how-card">
-                    <div class="how-card-number">1</div>
-                    <p>Choose a package and write us a mail</p>
-                </div>
-                <div class="how-card">
-                    <div class="how-card-number">2</div>
-                    <p>Order confirmation and secure payment via email (as soon as we'll see your email we'll send the confirmation mail back)</p>
-                </div>
-                <div class="how-card">
-                    <div class="how-card-number">3</div>
-                    <p>Fast development and delivery (3–5 business days)</p>
-                </div>
-            </div>
+    <!-- WHAT YOU GET -->
+    <section id="cosa-ottieni" aria-labelledby="benefits-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-tag">// Cosa ottieni</span>
+          <h2 id="benefits-title">Un sito che lavora<br />per te, 24 ore su 24.</h2>
+          <p class="section-desc">Ogni sito che realizziamo è pensato per convertire visitatori in clienti reali — con design pulito e struttura SEO solida fin dal primo giorno.</p>
         </div>
+        <div class="benefits-grid">
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">🎨</span>
+            <h3>Interfaccia Pulita e Moderna</h3>
+            <p>Design professionale e raffinato, ottimizzato per trasmettere fiducia al primo colpo d'occhio. Il tuo brand al meglio.</p>
+          </article>
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">📱</span>
+            <h3>UX Ottimizzata per Utenti</h3>
+            <p>Navigazione intuitiva su ogni dispositivo. Mobile-first, veloce, accessibile. I tuoi clienti troveranno ciò che cercano.</p>
+          </article>
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">⚡</span>
+            <h3>Sviluppo Veloce e Puntuale</h3>
+            <p>Dalla richiesta alla consegna: 3–10 giorni lavorativi. Nessuna attesa infinita, nessun ritardo senza spiegazioni.</p>
+          </article>
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">💬</span>
+            <h3>Comunicazione Chiara</h3>
+            <p>Aggiornamenti costanti via email, zero burocrazia. Sai sempre a che punto siamo e cosa sta succedendo.</p>
+          </article>
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">🔍</span>
+            <h3>SEO Locale Integrata</h3>
+            <p>Struttura tecnica ottimizzata per Google. Fatti trovare dai clienti nella tua zona prima della concorrenza.</p>
+          </article>
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">🔒</span>
+            <h3>Dominio + Hosting Inclusi</h3>
+            <p>Tutto gestito da noi per il primo anno. Nessuna configurazione tecnica richiesta da parte tua.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section id="email-section">
-        <div class="container">
-            <h2 class="section-title">What to include in your email</h2>
-            <div class="email-cards">
-                <div class="email-card">
-                    <h3>Selected Bundle</h3>
-                    <p>Let me know which package you chose (Base, Medium, or Pro).</p>
-                </div>
-                <div class="email-card">
-                    <h3>Detailed Website Description</h3>
-                    <p>Describe goals, style, sections, features, and references.</p>
-                </div>
-                <div class="email-card">
-                    <h3>Extra Notes</h3>
-                    <p>Deadlines, inspiration, or special requests.</p>
-                </div>
-            </div>
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- HOW IT WORKS -->
+    <section id="come-funziona" aria-labelledby="steps-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-tag">// Come funziona</span>
+          <h2 id="steps-title">Tre passi.<br />Zero stress.</h2>
+          <p class="section-desc">Dal primo contatto al sito online, il processo è semplice, trasparente e diretto. Nessuna perdita di tempo.</p>
         </div>
+        <ol class="steps-grid" aria-label="Processo di ordinazione">
+          <li class="step fade-in">
+            <span class="step-num" aria-hidden="true">01</span>
+            <div>
+              <h3>Invia la tua richiesta via email</h3>
+              <p>Scrivici a <strong>discolo262011@gmail.com</strong> con il nome della tua attività e il pacchetto che ti interessa. Risposta garantita entro 24 ore lavorative.</p>
+            </div>
+          </li>
+          <li class="step fade-in">
+            <span class="step-num" aria-hidden="true">02</span>
+            <div>
+              <h3>Conferma ordine e pagamento sicuro</h3>
+              <p>Riceviamo il brief della tua attività, confermiamo tutti i dettagli via email e gestiamo il pagamento in modo semplice e sicuro.</p>
+            </div>
+          </li>
+          <li class="step fade-in">
+            <span class="step-num" aria-hidden="true">03</span>
+            <div>
+              <h3>Sviluppo rapido e consegna</h3>
+              <p>Il tuo sito viene sviluppato e consegnato in 3–10 giorni lavorativi secondo il pacchetto scelto. Revisioni incluse, poi il tuo sito è online.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
     </section>
 
-    <section id="pricing">
-        <div class="container">
-            <h2 class="section-title">Pricing</h2>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-badge">Limited offer</div>
-                    <h3>Base</h3>
-                    <div class="pricing-old">$89</div>
-                    <div class="pricing-current">$59</div>
-                    <p class="pricing-description">A clean and functional website.</p>
-                    <ul class="pricing-features">
-                        <li>Responsive layout</li>
-                        <li>Essential sections</li>
-                        <li>Minimal styling</li>
-                        <li>Email delivery</li>
-                    </ul>
-                    <a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Base</a>
-                </div>
+    <div class="divider" aria-hidden="true"></div>
 
-                <div class="pricing-card featured">
-                    <div class="pricing-badge">Best value</div>
-                    <h3>Medium</h3>
-                    <div class="pricing-old">$129</div>
-                    <div class="pricing-current">$79</div>
-                    <div class="pricing-highlight">Best value for most projects.</div>
-                    <ul class="pricing-features">
-                        <li>Custom layout</li>
-                        <li>Improved UX flow</li>
-                        <li>Conversion-focused</li>
-                        <li>Priority handling</li>
-                    </ul>
-                    <a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Medium</a>
-                </div>
-
-                <div class="pricing-card">
-                    <div class="pricing-badge">Limited offer</div>
-                    <h3>Pro</h3>
-                    <div class="pricing-old">$179</div>
-                    <div class="pricing-current">$109</div>
-                    <p class="pricing-description">Premium polish and flexibility.</p>
-                    <ul class="pricing-features">
-                        <li>High-end customization</li>
-                        <li>Advanced layout</li>
-                        <li>More sections</li>
-                        <li>Top priority</li>
-                    </ul>
-                    <a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="cta-button" style="width: 100%; text-align: center;">Select Pro</a>
-                </div>
-            </div>
-            <p class="hosting-note">*Hosting is handled by the client.</p>
+    <!-- PRICING -->
+    <section id="prezzi" aria-labelledby="pricing-title">
+      <div class="container">
+        <div class="section-header fade-in" style="text-align:center;">
+          <span class="section-tag">// Pacchetti e prezzi</span>
+          <h2 id="pricing-title">Prezzi chiari.<br />Nessuna sorpresa.</h2>
+          <p class="section-desc" style="margin:0 auto;">Scegli il pacchetto più adatto alla tua attività. Tutto incluso, nessun costo nascosto, nessun abbonamento forzato.</p>
         </div>
+        <div class="pricing-grid">
+
+          <article class="pricing-card fade-in" aria-label="Pacchetto Starter a 490 euro">
+            <div class="plan-name">Starter</div>
+            <div class="plan-price"><span class="currency">€</span>490</div>
+            <div class="plan-period">pagamento unico · nessun rinnovo obbligatorio</div>
+            <ul class="plan-features" aria-label="Caratteristiche Starter">
+              <li>1–3 pagine personalizzate</li>
+              <li>Dominio + hosting 1 anno incluso</li>
+              <li>SEO base ottimizzata</li>
+              <li>Design mobile-first responsive</li>
+              <li>1 revisione inclusa</li>
+              <li>Consegna in ~3–5 giorni lavorativi</li>
+            </ul>
+            <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request%20%E2%80%93%20Starter" class="plan-btn plan-btn-outline" aria-label="Scegli il pacchetto Starter">
+              Scegli Starter
+            </a>
+          </article>
+
+          <article class="pricing-card featured fade-in" aria-label="Pacchetto Business a 790 euro, il più scelto">
+            <div class="featured-badge" aria-label="Pacchetto più scelto">⭐ Più scelto</div>
+            <div class="plan-name">Business</div>
+            <div class="plan-price"><span class="currency">€</span>790</div>
+            <div class="plan-period">pagamento unico · nessun rinnovo obbligatorio</div>
+            <ul class="plan-features" aria-label="Caratteristiche Business">
+              <li>Fino a 5 pagine personalizzate</li>
+              <li>Dominio + hosting 1 anno incluso</li>
+              <li>SEO avanzato + contenuti ottimizzati</li>
+              <li>Google Analytics integrato</li>
+              <li>Design premium su misura</li>
+              <li>Supporto tecnico 30 giorni</li>
+              <li>Consegna in ~5–7 giorni lavorativi</li>
+            </ul>
+            <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request%20%E2%80%93%20Business" class="plan-btn plan-btn-filled" aria-label="Scegli il pacchetto Business">
+              Scegli Business
+            </a>
+          </article>
+
+          <article class="pricing-card fade-in" aria-label="Pacchetto Pro a 1190 euro">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price"><span class="currency">€</span>1190</div>
+            <div class="plan-period">pagamento unico · nessun rinnovo obbligatorio</div>
+            <ul class="plan-features" aria-label="Caratteristiche Pro">
+              <li>Struttura personalizzata completa</li>
+              <li>SEO locale avanzata</li>
+              <li>Ottimizzazione conversioni (CRO)</li>
+              <li>Integrazione form e analytics avanzati</li>
+              <li>Supporto tecnico 60 giorni</li>
+              <li>Consegna in ~7–10 giorni lavorativi</li>
+            </ul>
+            <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request%20%E2%80%93%20Pro" class="plan-btn plan-btn-outline" aria-label="Scegli il pacchetto Pro">
+              Scegli Pro
+            </a>
+          </article>
+
+        </div>
+
+        <div class="maintenance-box fade-in" aria-label="Opzione manutenzione mensile">
+          <div class="maint-left">
+            <h3>🔧 Manutenzione Mensile — Opzionale</h3>
+            <p>Aggiornamenti continui, sicurezza, backup automatici e assistenza tecnica dedicata. Puoi aggiungere o cancellare in qualsiasi momento.</p>
+          </div>
+          <div class="maint-price">
+            €29<span class="maint-per">/mese</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="faq">
-        <div class="container">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">What happens next?</div>
-                    <div class="faq-answer">
-                        <p>You receive an order summary and payment link. Development starts immediately after confirmation.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Delivery time?</div>
-                    <div class="faq-answer">
-                        <p>Most websites are delivered within a few business days.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Do I own the website?</div>
-                    <div class="faq-answer">
-                        <p>Yes. Full ownership, no recurring fees.</p>
-                    </div>
-                </div>
-            </div>
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-tag">// Domande frequenti</span>
+          <h2 id="faq-title">Hai dubbi?<br />Ti rispondiamo.</h2>
         </div>
+        <div class="faq-list" role="list">
+
+          <div class="faq-item fade-in" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="faq1">
+              Come faccio a ordinare un sito web?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a" id="faq1" role="region">
+              <p>Scrivi una email a <strong>discolo262011@gmail.com</strong> indicando il nome della tua attività e il pacchetto di tuo interesse. Ti risponderemo entro 24 ore lavorative per concordare tutti i dettagli e procedere con il pagamento in modo semplice e sicuro.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="faq2">
+              Quanto tempo ci vuole per avere il sito online?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a" id="faq2" role="region">
+              <p>Dipende dal pacchetto scelto: <strong>Starter</strong> 3–5 giorni, <strong>Business</strong> 5–7 giorni, <strong>Pro</strong> 7–10 giorni lavorativi. I tempi partono dalla conferma del pagamento e dalla ricezione dei materiali necessari (testi, logo, immagini).</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="faq3">
+              Il sito sarà di mia proprietà?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a" id="faq3" role="region">
+              <p>Assolutamente sì. Il sito, il dominio e tutti i contenuti sono tuoi al 100% dal momento della consegna. Non esistono clausole di lock-in, vincoli di esclusiva o diritti trattenuti da noi.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="faq4">
+              Ci sono costi ricorrenti obbligatori?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a" id="faq4" role="region">
+              <p>No. Il pagamento è <strong>unico</strong> e include dominio + hosting per il primo anno. Dopo il primo anno, il rinnovo hosting è a tuo carico (mediamente €80–120/anno). La manutenzione mensile da €29 è completamente opzionale.</p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in" role="listitem">
+            <button class="faq-q" aria-expanded="false" aria-controls="faq5">
+              Posso richiedere modifiche dopo la consegna?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-a" id="faq5" role="region">
+              <p>Ogni pacchetto include revisioni: 1 per Starter. Con Business e Pro hai incluso anche il supporto post-consegna (30 e 60 giorni). Revisioni aggiuntive sono disponibili a tariffa concordata.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
 
-    <section id="start">
-        <div class="container">
-            <div class="final-cta">
-                <h2>Ready to get started?</h2>
-                <p>Choose a package and submit your request.</p>
-                <a href="mailto:discolo262011@gmail.com?subject=Website%20Request" class="cta-button">Start my website</a>
-            </div>
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- FINAL CTA -->
+    <section id="contatti" class="cta-section" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-box fade-in">
+          <span class="section-tag">// Inizia oggi</span>
+          <h2 id="cta-title">Porta la tua attività<br />online. Adesso.</h2>
+          <p>Ogni giorno senza un sito professionale è un cliente perso a favore della concorrenza. Il primo passo è gratuito: mandaci una email e ti risponderemo entro 24 ore.</p>
+          <a href__="mailto:discolo262011@gmail.com?subject=Website%20Request" class="btn-primary btn-large" aria-label="Scrivici ora per avere il tuo sito web">
+            ✉ Scrivici Ora — È Gratuito
+          </a>
+          <p class="cta-note">Risposta garantita entro 24 ore lavorative &middot; Nessun impegno &middot; Zero rischi</p>
         </div>
+      </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>© 2026 – www.sitebuyld.com · Fast delivery · <a href="mailto:discolo262011@gmail.com">websites.it99@gmail.com</a></p>
-        </div>
-    </footer>
+  </main>
 
-    <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        const navbar = document.querySelector('.navbar');
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">site<span>buyld</span>.com</span>
+        <p class="footer-copy">&copy; 2026 sitebuyld.com &middot; <a href__="mailto:discolo262011@gmail.com">discolo262011@gmail.com</a></p>
+        <p class="footer-tagline">// siti web professionali per attività locali italiane</p>
+      </div>
+    </div>
+  </footer>
 
-        let currentTheme = 'dark';
-        themeToggle.textContent = '🌙';
-
-        themeToggle.addEventListener('click', () => {
-            if (currentTheme === 'dark') {
-                html.setAttribute('data-theme', 'light');
-                themeToggle.textContent = '☀️';
-                currentTheme = 'light';
-            } else {
-                html.removeAttribute('data-theme');
-                themeToggle.textContent = '🌙';
-                currentTheme = 'dark';
-            }
-        });
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-
-        document.querySelector('.hero').classList.add('visible');
-
-        document.querySelectorAll('.faq-item').forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                
-                document.querySelectorAll('.faq-item').forEach(faq => {
-                    faq.classList.remove('active');
-                });
-                
-                if (!isActive) {
-                    item.classList.add('active');
-                }
-            });
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offset = 80;
-                    const targetPosition = target.offsetTop - offset;
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
